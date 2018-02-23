@@ -1,3 +1,5 @@
 from django.shortcuts import render
 
-# Create your views here.
+
+def archive_link(url):
+    return render('base.html', {'abc': 123})
