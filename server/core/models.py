@@ -4,12 +4,14 @@ from django.db import models
 from django.conf import settings
 
 # URL helpers
-without_scheme = lambda url: url.replace('http://', '').replace('https://', '').replace('ftp://', '')
+without_scheme = lambda url: (url.replace('http://', '', 1)
+                                 .replace('https://', '', 1)
+                                 .replace('ftp://', '', 1))
 without_query = lambda url: url.split('?', 1)[0]
 without_hash = lambda url: url.split('#', 1)[0]
 without_path = lambda url: url.split('/', 1)[0]
 domain = lambda url: without_hash(without_query(without_path(without_scheme(url))))
-base_url = lambda url: without_query(without_scheme(url))
+base_url = lambda url: wihout_scheme(url)  # uniq base url used to dedupe links
 
 
 
