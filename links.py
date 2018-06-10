@@ -33,6 +33,7 @@ Link {
 """
 
 import datetime
+from hashlib import sha256
 from html import unescape
 
 from util import (
@@ -58,6 +59,7 @@ def validate_links(links):
     for link in links:
         link['title'] = unescape(link['title'])
         link['latest'] = link.get('latest') or {}
+        link['hash'] = sha256(link['url'].encode('utf-8')).hexdigest()
         
         if not link['latest'].get('wget'):
             link['latest']['wget'] = wget_output_path(link)
@@ -99,7 +101,8 @@ def uniquefied_links(sorted_links):
 
     unique_timestamps = {}
     for link in unique_urls.values():
-        link['timestamp'] = lowest_uniq_timestamp(unique_timestamps, link['timestamp'])
+        hash_int = int(link['hash'], base='16')
+        link['timestamp'] = f'{link["timestamp"]}.{hash_int}'
         unique_timestamps[link['timestamp']] = link
 
     return unique_timestamps.values()
